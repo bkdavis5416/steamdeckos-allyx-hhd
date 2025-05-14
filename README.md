@@ -1,59 +1,76 @@
-# ROG Ally X: Fully Working `hhd-git` Setup on SteamOS 3.8 (Main)
+# 🛠️ ASUS ROG Ally X - HHD Service Fix (SteamOS)
 
-This guide outlines the **step-by-step process** to fix the `OSError: [Errno 16] Device or resource busy` error and make `hhd@deck` reliably start on boot. It's tailored for Arch-based systems like HoloISO or SteamOS running on the ASUS ROG Ally X.
-
-> **Tested on:** HoloISO (Steam Deck UI), Arch base, SteamOS-like environment on ROG Ally X.
+This guide walks you through getting `hhd@deck.service` running and **persisting across reboots** on SteamdeckOS-Holo 3.8 (ASUS ROG Ally X).
 
 ---
 
-## ✅ What Works After Following This
+## 🔓 Step 0: Unlock the Filesystem (SteamOS Only)
 
-* `hhd` daemon auto-starts after reboot
-* ROG Ally X controller is emulated properly
-* No more grab errors
-* RGB, power profiles, and controller mappings function correctly
+SteamOS uses a read-only root filesystem. To make changes like editing systemd units or installing packages, you must disable this protection:
 
----
+```bash
+sudo steamos-readonly disable
+```
 
-## 🔧 Prerequisites
-
-Make sure your system has the following:
-
-* Arch-based distro (HoloISO, SteamOS, etc.)
-* A working internet connection
-* Terminal access with sudo privileges
+> ✅ Optionally, ensure `/` is mounted read-write:
+>
+> ```bash
+> sudo mount -o remount,rw /
+> ```
 
 ---
 
-## 📦 Step 1: Install `yay` (AUR Helper)
+## 📆 Step 1: Install Required Build Tools
 
 ```bash
 sudo pacman -S --needed base-devel git
+```
+
+If you get keyring errors, initialize and populate the keyring:
+
+```bash
+sudo pacman-key --init
+sudo pacman-key --populate
+```
+
+---
+
+## 💾 Step 2: Install `yay` AUR Helper (Optional)
+
+If you don’t already have `yay`, install it manually:
+
+```bash
 cd ~
 git clone https://aur.archlinux.org/yay.git
-cd yay
+tar -xvf yay && cd yay
 makepkg -si
 ```
 
 ---
 
-## 📥 Step 2: Install `hhd-git`
+## 🧰 Step 3: Install `hhd-git` from AUR
 
 ```bash
 yay -S hhd-git
 ```
 
-Accept any prompts and allow yay to build/install dependencies. If prompted, confirm installation of `hhd-license-git`.
-
 ---
 
-## 🛠 Step 3: Create and Configure the Override File
+## 🔧 Step 4: Create Override for hhd\@deck Service
+
+Create the override directory:
 
 ```bash
-sudo mkdir -p /etc/systemd/system/hhd@deck.service.dsudo nano /etc/systemd/system/hhd@deck.service.d/override.conf
+sudo mkdir -p /etc/systemd/system/hhd@deck.service.d
 ```
 
-Paste this into the file:
+Then create the override config:
+
+```bash
+sudo nano /etc/systemd/system/hhd@deck.service.d/override.conf
+```
+
+Paste the following content:
 
 ```ini
 [Unit]
@@ -63,11 +80,11 @@ After=graphical.target inputplumber.service
 ExecStartPre=/bin/sleep 5
 ```
 
-Save and exit (CTRL+O, Enter, then CTRL+X).
+Save and exit (CTRL+O, ENTER, CTRL+X).
 
 ---
 
-## 🔁 Step 4: Reload and Enable the Service
+## 🔁 Step 5: Enable the Service for Reboot
 
 ```bash
 sudo systemctl daemon-reexec
@@ -75,47 +92,45 @@ sudo systemctl daemon-reload
 sudo systemctl enable hhd@deck
 ```
 
----
-
-## 🧪 Step 5: Reboot and Verify
+You can check its current status:
 
 ```bash
 systemctl status hhd@deck
 ```
 
-You should see something like:
+---
 
+## 🔄 Step 6: Reboot & Confirm
+
+Now reboot your system:
+
+```bash
+reboot
 ```
+
+After rebooting, confirm the service is active:
+
+```bash
+systemctl status hhd@deck
+```
+
+You should see:
+
+```bash
 Active: active (running)
 ```
 
-If it says `inactive (dead)`, recheck your override file and `WantedBy`.
+---
+
+## ✅ Success
+
+The `hhd` service should now launch automatically on every boot, **after** graphics and `inputplumber` are ready.
 
 ---
 
-## 🧠 Bonus Tips
+## 🧠 Notes
 
-* To debug startup issues:
+* This guide is written for SteamOS systems.
+* If future updates overwrite system-level units, you may need to **reinstall `hhd-git`** or reapply the override.
 
-  ```bash
-  journalctl -u hhd@deck --no-pager
-  ```
-* To manually start if testing:
-
-  ```bash
-  sudo systemctl start hhd@deck
-  ```
-
----
-
-## 🙌 Credits
-
-This was a frustrating issue caused by conflicting service startup order and device grabbing. Thanks to everyone in the community who’s shared their findings.
-
----
-
-## 📤 Share This
-
-If this saved your sanity, please star the repo and share with fellow ROG Ally tinkerers. Let’s make Linux handhelds better together.
-
-> Pull requests welcome to improve or automate this further!
+Contributions welcome!
