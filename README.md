@@ -113,7 +113,7 @@ systemctl status hhd@deck
 Now reboot your system:
 
 ```bash
-reboot
+sudo reboot
 ```
 
 After rebooting, confirm the service is active:
