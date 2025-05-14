@@ -1,4 +1,4 @@
-# ROG Ally X: Fully Working `hhd-git` Setup on Arch/HoloISO/SteamOS
+# ROG Ally X: Fully Working `hhd-git` Setup on SteamOS
 
 This guide outlines the **step-by-step process** to fix the `OSError: [Errno 16] Device or resource busy` error and make `hhd@deck` reliably start on boot. It's tailored for Arch-based systems like HoloISO or SteamOS running on the ASUS ROG Ally X.
 
