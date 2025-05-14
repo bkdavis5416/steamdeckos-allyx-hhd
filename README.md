@@ -1,4 +1,4 @@
-# ROG Ally X: Fully Working `hhd-git` Setup on SteamOS
+# ROG Ally X: Fully Working `hhd-git` Setup on SteamOS 3.8 (Main)
 
 This guide outlines the **step-by-step process** to fix the `OSError: [Errno 16] Device or resource busy` error and make `hhd@deck` reliably start on boot. It's tailored for Arch-based systems like HoloISO or SteamOS running on the ASUS ROG Ally X.
 
@@ -50,8 +50,7 @@ Accept any prompts and allow yay to build/install dependencies. If prompted, con
 ## 🛠 Step 3: Create and Configure the Override File
 
 ```bash
-sudo mkdir -p /etc/systemd/system/hhd@deck.service.d
-sudo nano /etc/systemd/system/hhd@deck.service.d/override.conf
+sudo mkdir -p /etc/systemd/system/hhd@deck.service.dsudo nano /etc/systemd/system/hhd@deck.service.d/override.conf
 ```
 
 Paste this into the file:
