@@ -1,6 +1,6 @@
-# 🛠️ ASUS ROG Ally X - HHD Service Fix (SteamOS)
+# 🛠️ ASUS ROG Ally X - HHD Service Fix (SteamOS 3.8)
 
-This guide walks you through getting `hhd@deck.service` running and **persisting across reboots** on SteamdeckOS-Holo 3.8 (ASUS ROG Ally X).
+This guide walks you through getting `hhd@deck.service` running and **persisting across reboots** on systems like SteamOS 3.8 (ASUS ROG Ally X).
 
 ---
 
@@ -84,7 +84,15 @@ Save and exit (CTRL+O, ENTER, CTRL+X).
 
 ---
 
-## 🔁 Step 5: Enable the Service for Reboot
+## 🔄 Step 5: Enable the Service for Reboot (System User Session Fix)
+
+Because this is a user-specific service, enable it specifically for the current user session with:
+
+```bash
+sudo ln -s /usr/lib/systemd/system/hhd@.service /etc/systemd/system/graphical.target.wants/hhd@deck.service
+```
+
+Then reload and enable:
 
 ```bash
 sudo systemctl daemon-reexec
@@ -100,7 +108,7 @@ systemctl status hhd@deck
 
 ---
 
-## 🔄 Step 6: Reboot & Confirm
+## 🔀 Step 6: Reboot & Confirm
 
 Now reboot your system:
 
