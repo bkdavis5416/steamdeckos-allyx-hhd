@@ -119,7 +119,7 @@ reboot
 After rebooting, confirm the service is active:
 
 ```bash
-systemctl status hhd@deck
+systemctl --user status hhd.service
 ```
 
 You should see:
