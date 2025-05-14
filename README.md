@@ -1,10 +1,10 @@
-# 🛠️ ASUS ROG Ally X - HHD Service Fix (SteamOS 3.8)
+# ASUS ROG Ally X - HHD Service Fix (SteamOS 3.8)
 
 This guide walks you through getting `hhd@deck.service` running and **persisting across reboots** on systems like SteamOS 3.8 (ASUS ROG Ally X).
 
 ---
 
-## 🔓 Step 0: Unlock the Filesystem (SteamOS Only)
+## Step 0: Unlock the Filesystem (SteamOS Only)
 
 SteamOS uses a read-only root filesystem. To make changes like editing systemd units or installing packages, you must disable this protection:
 
@@ -12,7 +12,7 @@ SteamOS uses a read-only root filesystem. To make changes like editing systemd u
 sudo steamos-readonly disable
 ```
 
-> ✅ Optionally, ensure `/` is mounted read-write:
+> Optionally, ensure `/` is mounted read-write:
 >
 > ```bash
 > sudo mount -o remount,rw /
@@ -20,7 +20,7 @@ sudo steamos-readonly disable
 
 ---
 
-## 📆 Step 1: Install Required Build Tools
+## Step 1: Install Required Build Tools
 
 ```bash
 sudo pacman -S --needed base-devel git
@@ -35,7 +35,7 @@ sudo pacman-key --populate
 
 ---
 
-## 💾 Step 2: Install `yay` AUR Helper (Optional)
+## Step 2: Install `yay` AUR Helper (Optional)
 
 If you don’t already have `yay`, install it manually:
 
@@ -48,7 +48,7 @@ makepkg -si
 
 ---
 
-## 🧰 Step 3: Install `hhd-git` from AUR
+## Step 3: Install `hhd-git` from AUR
 
 ```bash
 yay -S hhd-git
@@ -56,7 +56,7 @@ yay -S hhd-git
 
 ---
 
-## 🔧 Step 4: Create Override for hhd\@deck Service
+## Step 4: Create Override for hhd\@deck Service
 
 Create the override directory:
 
@@ -84,7 +84,7 @@ Save and exit (CTRL+O, ENTER, CTRL+X).
 
 ---
 
-## 🔄 Step 5: Enable the Service for Reboot (System User Session Fix)
+## Step 5: Enable the Service for Reboot (System User Session Fix)
 
 Because this is a user-specific service, enable it specifically for the current user session with:
 
@@ -108,7 +108,7 @@ systemctl status hhd@deck
 
 ---
 
-## 🔀 Step 6: Reboot & Confirm
+## Step 6: Reboot & Confirm
 
 Now reboot your system:
 
@@ -130,13 +130,13 @@ Active: active (running)
 
 ---
 
-## ✅ Success
+## Success
 
 The `hhd` service should now launch automatically on every boot, **after** graphics and `inputplumber` are ready.
 
 ---
 
-## 🧠 Notes
+## Notes
 
 * This guide is written for SteamOS systems.
 * If future updates overwrite system-level units, you may need to **reinstall `hhd-git`** or reapply the override.
